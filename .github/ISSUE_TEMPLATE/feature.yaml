@@ -1,0 +1,32 @@
+name: Feature Request / Task
+about: Describe a new feature or task
+title: ''
+labels: feat
+assignees: ''
+
+
+body:
+  - type: markdown
+    attributes:
+    value: |
+      ## Description
+      <!-- Describe the feature or task you want to implement. Be specific about the user-facing behavior or functionality. -->
+
+
+  - type: input
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: |
+        List clear and testable requirements for this feature.
+        Each criterion should be verifiable.
+      validations:
+        required: true
+
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / Implementation Ideas
+      description: |
+        Any thoughts, references, or technical notes that might help while implementing this issue.
