@@ -1,5 +1,5 @@
 name: Feature Request
-about: Describe a new feature
+description: Describe a new feature
 title: "[REQUEST] - <title>"
 labels: [
   "feat"
@@ -8,9 +8,9 @@ labels: [
 body:
   - type: markdown
     attributes:
-    value: |
-      ## Description
-      <!-- Describe the feature or task you want to implement. Be specific about the user-facing behavior or functionality. -->
+      value: |
+        ## Description
+        <!-- Describe the feature or task you want to implement. Be specific about the user-facing behavior or functionality. -->
 
 
   - type: input
@@ -20,8 +20,8 @@ body:
       description: |
         List clear and testable requirements for this feature.
         Each criterion should be verifiable.
-      validations:
-        required: true
+    validations:
+      required: true
 
 
   - type: textarea
