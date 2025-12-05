@@ -13,7 +13,7 @@ body:
         <!-- Describe the feature or task you want to implement. Be specific about the user-facing behavior or functionality. -->
 
 
-  - type: input
+  - type: textarea
     id: acceptance_criteria
     attributes:
       label: Acceptance Criteria
