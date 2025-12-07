@@ -1,6 +1,7 @@
 const std = @import("std");
 const builtin = @import("builtin");
 const cli = @import("presentation/cli/cli.zig");
+const expect = std.testing.expect;
 
 pub fn main() !void {
     var debug_allocator: std.heap.DebugAllocator(.{}) = .init;
@@ -24,4 +25,9 @@ pub fn main() !void {
     } else {
         cli.run(allocator, args[1..]);
     }
+}
+
+// This test should be deleted once testing has been initilized in the rest of the project.
+test "always_true" {
+    try expect(1 == 1);
 }
