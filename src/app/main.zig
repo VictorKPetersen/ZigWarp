@@ -26,9 +26,6 @@ pub fn main() !void {
             cli.CliError.MissingArgument => {
                 std.log.err("Missing command-line arguments.", .{});
             },
-            cli.CliError.UnkownCommand => {
-                std.log.err("Unkown Command.", .{});
-            },
         };
     }
 }

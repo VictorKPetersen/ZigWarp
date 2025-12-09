@@ -1,6 +1,8 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator;
-const Action = @import("action.zig").Action;
+const action_import = @import("Action.zig");
+const Action = action_import.Action;
+const ActionError = action_import.ActionError;
 
 const expect = std.testing.expect;
 const expectError = std.testing.expectError;
@@ -9,12 +11,9 @@ const expectEqualSlices = std.testing.expectEqualSlices;
 
 pub const CliError = error{
     MissingArgument,
-    UnkownCommand,
 };
 
 pub fn run(allocator: Allocator, args: []const []const u8) !void {
-    _ = allocator;
-
     if (args.len <= 0) return CliError.MissingArgument;
 
     const main_command = args[0];
@@ -22,11 +21,26 @@ pub fn run(allocator: Allocator, args: []const []const u8) !void {
 
     const potential_action = matchCommand(main_command);
 
-    if (potential_action) |action| {
-        action.execute(arguments);
-    } else {
-        return CliError.UnkownCommand;
+    if (potential_action == null) {
+        std.log.err("Unkown Command '{s}'.", .{main_command});
+        return;
     }
+
+    const action = potential_action.?;
+
+    if (action.min_args() > arguments.len) {
+        std.log.err("Not Enough Arguments for {s}. Requires {d} but got {d}.", .{ action.name(), action.min_args(), arguments.len });
+        return;
+    }
+
+    action.execute(allocator, arguments) catch |err| {
+        std.log.err("Action Failed: {s}", .{@errorName(err)});
+
+        switch (err) {
+            ActionError.PathError => std.log.err("Error with file path: {}.", .{err}),
+        }
+        return;
+    };
 }
 
 /// Attemps to find a matching Action based on the input command name.

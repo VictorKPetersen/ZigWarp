@@ -3,13 +3,21 @@ const std = @import("std");
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+
+    const warp_mod = b.addModule("warp", .{
+        .root_source_file = b.path("src/warps/warp_service.zig"),
+        .target = target,
+    });
+
     const exe = b.addExecutable(.{
         .name = "zwarp",
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/app/main.zig"),
             .target = target,
             .optimize = optimize,
-            .imports = &.{},
+            .imports = &.{
+                .{ .name = "warp", .module = warp_mod },
+            },
         }),
     });
 
