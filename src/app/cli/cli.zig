@@ -37,7 +37,9 @@ pub fn run(allocator: Allocator, args: []const []const u8) !void {
         std.log.err("Action Failed: {s}", .{@errorName(err)});
 
         switch (err) {
-            ActionError.PathError => std.log.err("Error with file path: {}.", .{err}),
+            ActionError.BadPath => std.log.err("Error with file path: {}.", .{err}),
+            ActionError.SaveFailed => std.log.err("Failed to save warp to file: {}.", .{err}),
+            ActionError.PermissionDenied => std.log.err("Permission denied {}", .{err}),
         }
         return;
     };
