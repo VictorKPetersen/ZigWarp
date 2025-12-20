@@ -1,7 +1,6 @@
 const std = @import("std");
 const builtin = @import("builtin");
 const cli = @import("cli/cli.zig");
-const expect = std.testing.expect;
 
 pub fn main() !void {
     var debug_allocator: std.heap.DebugAllocator(.{}) = .init;

@@ -33,13 +33,14 @@ pub fn run(allocator: Allocator, args: []const []const u8) !void {
         return;
     }
 
-    action.execute(allocator, arguments) catch |err| {
-        std.log.err("Action Failed: {s}", .{@errorName(err)});
-
+    action.execute(
+        allocator,
+        arguments,
+    ) catch |err| {
         switch (err) {
+            ActionError.PermissionDenied => std.log.err("Permission denied {}", .{err}),
             ActionError.BadPath => std.log.err("Error with file path: {}.", .{err}),
             ActionError.SaveFailed => std.log.err("Failed to save warp to file: {}.", .{err}),
-            ActionError.PermissionDenied => std.log.err("Permission denied {}", .{err}),
         }
         return;
     };
@@ -49,7 +50,7 @@ pub fn run(allocator: Allocator, args: []const []const u8) !void {
 ///
 /// Will return first found command where .name() matches command_name.
 /// If no matching commands are found returns null.
-pub fn matchCommand(command_name: []const u8) ?Action {
+fn matchCommand(command_name: []const u8) ?Action {
     const Info = @typeInfo(Action).@"union";
 
     inline for (Info.fields) |field| {
@@ -92,7 +93,7 @@ test "cli.matchCommand returns null on partial match" {
     try expect(potential_action == null);
 }
 
-test "cli.matchCommand succes on 'add' " {
+test "cli.matchCommand succes on add" {
     const input_command = "add";
     const potential_action = matchCommand(input_command);
 

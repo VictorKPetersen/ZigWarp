@@ -9,7 +9,11 @@ pub const ActionError = AddActionError;
 pub const Action = union(enum) {
     add: AddAction,
 
-    pub fn execute(self: @This(), allocator: Allocator, args: []const []const u8) ActionError!void {
+    pub fn execute(
+        self: @This(),
+        allocator: Allocator,
+        args: []const []const u8,
+    ) ActionError!void {
         try switch (self) {
             inline else => |action| action.execute(allocator, args),
         };

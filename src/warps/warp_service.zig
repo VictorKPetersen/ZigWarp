@@ -1,10 +1,26 @@
+const std = @import("std");
 const Warp = @import("Warp.zig").Warp;
-pub const WarpDTO = @import("WarpDTO.zig").WarpDTO;
-pub const WarpCreationError = @import("WarpError.zig").WarpCreationError;
+const warp_repo = @import("warp_repo.zig");
+const Dir = std.fs.Dir;
+const WarpDTO = @import("Warp.zig").WarpDTO;
+const CreateError = @import("warp_errors.zig").CreateError;
+const Diagnostics = @import("warp_diagnostics.zig").Diagnostics;
 
-pub fn createAndSaveWarp(warp_name: []const u8, warp_path: []const u8) WarpCreationError!WarpDTO {
-    if (warp_name.len <= 0) return WarpCreationError.MissingName;
-    if (warp_path.len <= 0) return WarpCreationError.MissingPath;
+pub fn createAndSaveWarp(
+    data_dir: Dir,
+    warp_name: []const u8,
+    warp_path: []const u8,
+    diagnostics: ?*Diagnostics,
+) !WarpDTO {
+    if (warp_name.len <= 0) return CreateError.MissingName;
+    if (warp_path.len <= 0) return CreateError.MissingPath;
+
+    const file = try warp_repo.getOrCreateSaveFile(
+        data_dir,
+        "warps.json",
+        diagnostics,
+    );
+    defer file.close();
 
     const dto: WarpDTO = .{
         .name = warp_name,
